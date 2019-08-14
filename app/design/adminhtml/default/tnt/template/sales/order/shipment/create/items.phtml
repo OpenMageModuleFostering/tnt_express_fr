@@ -127,17 +127,22 @@ function toggleCreateLabelCheckbox(){
 function submitShipment(btn){
     if( $('orderPoids') ) {
         var checkPoids = '0';
+        var mess = '';
         var colis = $$('.colis').each(function(e) {
             checkPoids = parseFloat(checkPoids)+parseFloat(e.value);
-            if( parseInt(e.value) > parseInt($('maxPoids').value) ) {
-                alert( "Le poids de chaque colis ne doit pas dépasser "+$('maxPoids').value+"Kg" );
-                return false;
+            if( e.value == '' ||parseFloat(e.value) == 0 || parseFloat(e.value) > parseInt($('maxPoids').value) ) {
+                mess = "Le poids de chaque colis doit être compris entre 0.1Kg et "+$('maxPoids').value+"Kg";
             }
         });
+        if( mess != '' ) {
+            alert( mess );
+            return false;
+        }
 
-        if( checkPoids == '0' || checkPoids != $('orderPoids').value ) {
-            if( isNaN(checkPoids) ) { checkPoids = '0'; }
-            if(!confirm("La somme de vos colis n'est pas correcte ("+checkPoids+"Kg au lieu de "+$('orderPoids').value+"Kg).")) {
+
+        if( checkPoids == '0.1' || checkPoids != $('orderPoids').value ) {
+            if( isNaN(checkPoids) ) { checkPoids = '0.1'; }
+            if(!confirm("La somme de vos colis n'est pas correcte ("+checkPoids+"Kg au lieu de "+$('orderPoids').value+"Kg).\n\nCliquer sur 'Annuler' pour revenir à l'écran précédent\nCliquer sur 'OK' pour confirmer vos valeurs")) {
                 return false;
             }
         }

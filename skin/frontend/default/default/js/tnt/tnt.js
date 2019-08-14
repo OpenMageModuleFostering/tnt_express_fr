@@ -168,6 +168,11 @@ function shippingMethodTnt(url){
 		         parameters:{street:street,description:description,postcode:postcode,city:city,info_comp:info_comp}	         
 		         });
 	}
+
+    if($("s_method_tnt_JD") && $("s_method_tnt_JD").checked){
+        var newShippingAddress = jQuery('.name-firstname input').val()+' '+jQuery('.name-lastname input').val()+'<br />'+description+'<br />'+street+'<br />'+city+', '+postcode+'<br />France';
+        jQuery('#shipping-progress-opcheckout dd address').html(newShippingAddress);
+    }
 	
 	if ($("tnt_pr_choix") != null) { 
 		$("tnt_pr_choix").innerHTML = '';

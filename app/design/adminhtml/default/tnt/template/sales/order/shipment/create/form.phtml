@@ -69,7 +69,7 @@
                     <div id="createColis">
                         <?php for($c=1; $c<=$nbColis; $c++) {
                                 //if( $c == $nbColis ) { $poidsColis = $reste; } else { $poidsColis = $poidsMaxColis; $reste-= $poidsColis; } ?>
-                        Poids colis <?php echo $c; ?> : <input type="text" name="colis<?php echo $c; ?>" value="<?php //echo $poidsColis; ?>" class="colis" /><br />
+                        Poids colis <?php echo $c; ?> : <input type="text" name="colis<?php echo $c; ?>" value="<?php if($nbColis==1) { echo $orderPoids; } ?>" class="colis" /><br />
                         <?php } ?>
                     </div>
 <?php 				if( $entreprise == '1' ) { ?>
@@ -89,8 +89,8 @@
 						singleClick : true
 					});
 
-					function checkNbColis() {
-						if($("nb_colis").value > 4) {
+					function checkNbColis() { //plus utile
+						if($("nb_colis").value > 99) {
 							alert('Attention, la livraison de plus de 4 colis engendre un coût supplémentaire.');
 						}
 					}

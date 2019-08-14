@@ -140,9 +140,20 @@ implements Mage_Shipping_Model_Carrier_Interface
     	
     	$authvars = new SoapVar($authheader, XSD_ANYXML);
 		$header = new SoapHeader("http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd", "Security", $authvars);
-			
-		$soap = new SoapClient($url, array('trace'=>1));
-		$soap->__setSOAPHeaders(array($header));
+
+		//$soap = new SoapClient($url, array('trace'=>1));
+        $soap = new SoapClient($url, array('trace'=> 1,
+                'stream_context'=>stream_context_create(array(
+                    'http'=> array(
+                        'user_agent' => 'PHP/SOAP',
+                        'accept' => 'application/xml'
+                    )
+                ))
+            )
+        );
+
+
+        $soap->__setSOAPHeaders(array($header));
 			
 		try {
 			if($fonction == 'feasibility') {					
@@ -209,11 +220,11 @@ implements Mage_Shipping_Model_Carrier_Interface
     	$rate = Mage::getModel('shipping/rate_result_method');
     	
     	$totals = Mage::getSingleton('checkout/session')->getQuote()->getTotals(); //Total object
-		$totalCart = round($totals["subtotal"]->getValue()); //Subtotal value		
+        $totalCart = $totals["subtotal"]->getValue(); //Subtotal value
 		
 		if(isset($totals['discount']) && $totals['discount']->getValue()) {
 			$totalCart = $totalCart + $totals['discount']->getValue();
-		}
+        }
 		
 		$items = Mage::getSingleton('checkout/session')->getQuote()->getAllItems();
 		$shipping_weight = 0;
@@ -221,7 +232,7 @@ implements Mage_Shipping_Model_Carrier_Interface
 		
 		foreach($items as $item) {
 			if( $item->getProductType() == 'configurable' ) {
-			} else {			
+			} else {
 				//check l'article le plus lourd
 				if( $item->getWeight() > $heaviest_item) {				
 					$heaviest_item = $item->getWeight();
@@ -268,23 +279,35 @@ implements Mage_Shipping_Model_Carrier_Interface
 					
 	            	if( $this->getConfigData($m['serviceCode'].'_free') != 0 && $this->getConfigData($m['serviceCode'].'_free') <= $totalCart ) {
 						$tarif = '0';
-					} else {						
-						$table = explode(",", $this->getConfigData($m['serviceCode'].'_amount'));						
+					} else {
+						$table = explode(",", $this->getConfigData($m['serviceCode'].'_amount'));
 						
 			            $tarifTrouve=true;
-			            //si le commercant choisi un forfait plutot qu'une table de correspondance poids:prix
+			            //si le commercant choisi un forfait plutot qu'une table de correspondance poids:prix ou panier:prix
 			            if(count($table) == 1) {
 			            	$tarif = $table[0];
 			            } else {
 			            	for ($i = 0; $i < sizeof($table); $i++) {
 				            	$tmp = explode(":", $table[$i]);
 
-				            	if ($shipping_weight > $tmp[0])
-				                	continue;
-				                if (($shipping_weight <= $tmp[0]) AND $tarifTrouve) {
-				                	$tarif=$tmp[1];
-				                    $tarifTrouve=false;
-				                }
+                                //si le commercant choisi une table de correspondance panier:prix
+                                if( preg_match("/€/", $tmp[0]) ) {
+                                    $prix = str_replace('€', '', $tmp[0]);
+
+                                    if ($totalCart > $prix)
+                                        continue;
+                                    if (($totalCart <= $prix) AND $tarifTrouve) {
+                                        $tarif=$tmp[1];
+                                        $tarifTrouve=false;
+                                    }
+                                } else {
+                                    if ($shipping_weight > $tmp[0])
+                                        continue;
+                                    if (($shipping_weight <= $tmp[0]) AND $tarifTrouve) {
+                                        $tarif=$tmp[1];
+                                        $tarifTrouve=false;
+                                    }
+                                }
 				            }
 			            }
 					}

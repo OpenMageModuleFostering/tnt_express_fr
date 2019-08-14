@@ -3,7 +3,7 @@
 <config>
     <modules>
         <Infostrates_Tnt>
-            <version>3.0.10</version>
+            <version>3.0.13</version>
             <depends>
 				<Mage_Adminhtml />
 				<Mage_Shipping />
