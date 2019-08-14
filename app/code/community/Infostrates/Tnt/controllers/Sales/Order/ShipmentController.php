@@ -168,7 +168,8 @@ class Infostrates_Tnt_Sales_Order_ShipmentController extends Mage_Adminhtml_Sale
 						                    											'phoneNumber' => substr($phoneNumber,0,10),
 						                    											'accessCode' => substr($accessCode,0,7),
 						                    											'floorNumber' => substr($floorNumber,0,2),
-						                    											'buldingId' => substr($buildingId,0,3)
+						                    											'buldingId' => substr($buildingId,0,3),
+                                                                                        'sendNotification' => '1'
 						                    											),
 						                                   'serviceCode'   	=> $_shippingMethod[1],
 						                                   'quantity'       => $nb_colis,
