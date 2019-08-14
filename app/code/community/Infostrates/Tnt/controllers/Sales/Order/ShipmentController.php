@@ -42,20 +42,17 @@ class Infostrates_Tnt_Sales_Order_ShipmentController extends Mage_Adminhtml_Sale
 
                     $rec_typeid = '';
                     $rec_name = '';
-                    $poids_colis_max = $this->getConfigData('max_package_weight');
 
                     if($_shippingMethod['1'] == "A" || $_shippingMethod['1'] == "T" || $_shippingMethod['1'] == "M" || $_shippingMethod['1'] == "J") {
                     	$rec_type = 'ENTERPRISE';
                     	$rec_name = trim($_order->getShippingAddress()->getCompany());
                     } elseif($_shippingMethod['1'] == "AZ" || $_shippingMethod['1'] == "TZ" || $_shippingMethod['1'] == "MZ" || $_shippingMethod['1'] == "JZ") {
                     	$rec_type = 'INDIVIDUAL';
-                    	$poids_colis_max = ($this->getConfigData('max_package_weight')-10);
                     } else {
                     	$rec_type = 'DROPOFFPOINT';
                     	$extt = explode(' ',trim($_order->getShippingAddress()->getCompany()));
                     	$rec_typeid = end($extt);
                     	$rec_name = str_replace($rec_typeid, '', $_order->getShippingAddress()->getCompany());
-                    	$poids_colis_max = ($this->getConfigData('max_package_weight')-10);
                     }
 
                     $rec_address1 = $_order->getShippingAddress()->getStreet(1);
@@ -74,8 +71,20 @@ class Infostrates_Tnt_Sales_Order_ShipmentController extends Mage_Adminhtml_Sale
 
                     $poids_restant = $_order->getWeight();
                     for($i=1;$i<=$nb_colis;$i++) {
-                        $colis = "colis".$i;
-                        $parcelWeight = $this->getRequest()->getPost($colis);
+                    	if($i == $nb_colis) {
+                    		if( $poids_restant > $this->getConfigData('max_package_weight') ) {
+                    			$parcelWeight = $this->getConfigData('max_package_weight');
+                    		} else {
+                    			$parcelWeight = $poids_restant;
+                    		}
+                    	} else {
+                    		$parcelWeight = $this->getConfigData('max_package_weight');
+                    		$poids_restant = $poids_restant - $parcelWeight;
+                    	}
+
+                    	if($parcelWeight < '0.1') {
+                    		$parcelWeight = '0.1';
+                    	}
 
                     	$parcelsRequest[] = array('sequenceNumber'=>$i,'customerReference' => $_order->getRealOrderId(), 'weight' => $parcelWeight);
                     }
@@ -168,8 +177,7 @@ class Infostrates_Tnt_Sales_Order_ShipmentController extends Mage_Adminhtml_Sale
 						                    											'phoneNumber' => substr($phoneNumber,0,10),
 						                    											'accessCode' => substr($accessCode,0,7),
 						                    											'floorNumber' => substr($floorNumber,0,2),
-						                    											'buldingId' => substr($buildingId,0,3),
-                                                                                        'sendNotification' => '1'
+						                    											'buldingId' => substr($buildingId,0,3)
 						                    											),
 						                                   'serviceCode'   	=> $_shippingMethod[1],
 						                                   'quantity'       => $nb_colis,

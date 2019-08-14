@@ -139,7 +139,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                             <validate>required-entry</validate>
-                            <comment>Soit un montant unique ex : 15.99. Soit au format poids panier/prix ex : 10:23.90,20:52.30,1000:99. Soit au format montant panier/prix ex : 20€:5.90,40€:9.90,150€:15.90</comment>
+                            <comment>Soit un montant unique ex : 15.99. Soit au format poids/prix ex : 10:23.90,20:52.30,1000:99</comment>
                         </JZ_amount>
                         <JZ_free>
                         	<label>Minimum d'achat pour TNT 24h à Domicile offert</label>
@@ -159,7 +159,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                             <validate>required-entry</validate>
-                            <comment>Soit un montant unique ex : 15.99. Soit au format poids panier/prix ex : 10:23.90,20:52.30,1000:99. Soit au format montant panier/prix ex : 20€:5.90,40€:9.90,150€:15.90</comment>
+                            <comment>Soit un montant unique ex : 15.99. Soit au format poids/prix ex : 10:23.90,20:52.30,1000:99</comment>
                         </J_amount>
                         <J_free>
                         	<label>Minimum d'achat pour TNT 24h Entreprise offert</label>
@@ -179,7 +179,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                             <validate>required-entry</validate>
-                            <comment>Soit un montant unique ex : 15.99. Soit au format poids panier/prix ex : 10:23.90,20:52.30,1000:99. Soit au format montant panier/prix ex : 20€:5.90,40€:9.90,150€:15.90</comment>
+                            <comment>Soit un montant unique ex : 15.99. Soit au format poids/prix ex : 10:23.90,20:52.30,1000:99</comment>
                         </JD_amount>
                         <JD_free>
                         	<label>Minimum d'achat pour TNT 24h en Relais Colis® offert</label>
