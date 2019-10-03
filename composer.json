@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/TNT_Express_Fr",
+    "name": "OpenMageModuleFostering\/TNT_Express_Fr",
     "type": "magento-module",
     "license": "OSL-v3.0",
     "homepage": "",
-    "description": "Extension officielle vous permettant de proposer les services TNT à vos clients.",
+    "description": "Extension officielle vous permettant de proposer les services TNT \u00e0 vos clients.",
     "authors": [
-    {
-        "name": "Infostrates",
-        "email": "magento@infostrates.fr"
-    }
-],
+        {
+            "name": "Infostrates",
+            "email": "magento@infostrates.fr"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
